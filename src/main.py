@@ -1,6 +1,20 @@
 from app import live_chat_monitor, room_control
+from app.utility import change_room_display_id
 from gui import user_interface
 
 if __name__ == '__main__':
-    monitor = live_chat_monitor.Monitor()
-    monitor.run()
+    option = input('0 to close\n1 to start\n2 to change room\n')
+    while option.isdigit():
+        print(f'\nYou entered: {option}\n')
+        match int(option):
+            case 0:
+                print('Exiting...')
+                break
+            case 1:
+                print('Starting monitor')
+                monitor = live_chat_monitor.Monitor()
+                monitor.run()
+            case 2:
+                print('Changing room display id')
+                change_room_display_id()
+        option = input('0 to close\n1 to start\n2 to change room\n')
