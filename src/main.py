@@ -1,5 +1,5 @@
 from app import live_chat_monitor, room_control
-from app.utility import change_room_display_id
+from app.utility import change_room_display_id, is_logged_in
 from gui import user_interface
 
 def update(id, msg, ban):
@@ -7,7 +7,7 @@ def update(id, msg, ban):
     # ban(1)
 
 if __name__ == '__main__':
-    option = input('0 to close\n1 to start\n2 to change room\n')
+    option = input('0 to close\n1 to start\n2 to change room\n3 to change login cookie\n')
     while option.isdigit():
         print(f'\nYou entered: {option}\n')
         match int(option):
@@ -21,6 +21,9 @@ if __name__ == '__main__':
             case 2:
                 print('Changing room display id')
                 change_room_display_id()
+            case 3:
+                print('Changing login cookie')
+                is_logged_in(0)
             case _:
                 print('Exiting...')
                 break
