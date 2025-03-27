@@ -1,5 +1,6 @@
 from bilibili_api import live, sync
 from app.utility import get_credentials, get_room_display_id
+from app.room_control import RoomControl
 import threading
 import logging
 
@@ -12,13 +13,16 @@ class Monitor():
         # Passed callback function to handle danmu event updates
         self.update = update
 
-        # Grab credential and login prepare chat hook
+        # Grab credential and prepare chat hook
         self.credential = get_credentials()
         self.room_display_id = get_room_display_id()
-        self.room = live.LiveDanmaku(
+        self.live_danmaku = live.LiveDanmaku(
             room_display_id=self.room_display_id,
             credential=self.credential
         )
+
+        # Create instance of room_control with bilibili_api.LiveRoom object
+        self.room_control = RoomControl(self.room_display_id, self.credential)
 
         # Used to run process in sub-thread
         self.thread = None
@@ -27,7 +31,7 @@ class Monitor():
         self.id = 0
 
         # Message event handler
-        @self.room.on('DANMU_MSG')
+        @self.live_danmaku.on('DANMU_MSG')
         async def on_danmaku(event):
 
             # Check if event body is valid message structure
@@ -51,15 +55,15 @@ class Monitor():
             parsed_message_info['sender_rank'] = 0
             if len(info) > 3 and len(info[3]) > 3:
                 parsed_message_info['fan_id'] = info[3][3]
-                if info[3][3] == self.room.room_display_id:
+                if info[3][3] == self.live_danmaku.room_display_id:
                     parsed_message_info['sender_rank'] = info[3][0]
 
             # Create structured text to be displayed on gui
             parsed_message_info['structured_message'] = f'{parsed_message_info["sender_name"]} (lv.{parsed_message_info['sender_rank']}): {parsed_message_info["message"]}'
 
-            # Try calling callback method to update Gui
+            # Try calling callback method to update Gui, passing ban function for external access
             try:
-                self.update(self.id, parsed_message_info)
+                self.update(self.id, parsed_message_info, self.room_control.ban)
                 self.id = (self.id+1)%36
             except Exception as e:
                 print(e)
@@ -69,7 +73,7 @@ class Monitor():
 
 
     def launch_monitor(self):
-        sync(self.room.connect())
+        sync(self.live_danmaku.connect())
 
     def run(self):
 

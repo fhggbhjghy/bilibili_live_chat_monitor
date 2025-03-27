@@ -2,8 +2,9 @@ from app import live_chat_monitor, room_control
 from app.utility import change_room_display_id
 from gui import user_interface
 
-def update(id, msg):
+def update(id, msg, ban):
     print(msg)
+    # ban(1)
 
 if __name__ == '__main__':
     option = input('0 to close\n1 to start\n2 to change room\n')
