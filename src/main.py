@@ -15,9 +15,11 @@ if __name__ == '__main__':
                 print('Exiting...')
                 break
             case 1:
-                print('Starting monitor')
-                monitor = live_chat_monitor.Monitor(update)
-                monitor.run()
+                # print('Starting monitor')
+                # monitor = live_chat_monitor.Monitor(update)
+                # monitor.run()
+                gui = user_interface.Gui()
+                gui.run()
             case 2:
                 print('Changing room display id')
                 change_room_display_id()

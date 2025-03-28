@@ -1,0 +1,31 @@
+{
+    "default": {
+        "window":{
+            "width": 1536,
+            "height": 864,
+            "state": "zoomed",
+            "fg_color": "#D0BCFE"
+        },
+        "canvas":{
+            "x":0,
+            "y":0,
+            "bg":"#BCA1F9",
+            "bd":0,
+            "highlightthickness": 0,
+            "relief": "ridge"
+        },
+        "content_background":{
+            "x1":80,
+            "y1":60,
+            "x2":1490,
+            "y2":820,
+            "radius":100,
+            "fill":"#F3ECFF",
+            "outline":""
+        } 
+    },
+
+    "custom": {
+
+    }
+}
