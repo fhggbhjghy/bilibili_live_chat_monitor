@@ -5,7 +5,7 @@ from pathlib import Path
 
 OUTPUT_PATH = Path(__file__).parent
 
-def load_settings():
+def load_settings() -> dict:
     path = OUTPUT_PATH / 'option.json'
 
     if not os.path.exists(path):
@@ -17,7 +17,7 @@ def load_settings():
         if settings['custom']:
             print('not empty')
             return settings['custom']
-        print('empty')
+        # print('empty')
         return settings['default']
 
 def get_window_scaling():
