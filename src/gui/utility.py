@@ -2,8 +2,19 @@ import ctypes
 import os
 from json import load
 from pathlib import Path
+from customtkinter import CTkFrame
 
 OUTPUT_PATH = Path(__file__).parent
+
+def justify_frame(frame: CTkFrame, index, direction, weight = 1) -> None:
+    match direction:
+        case 'both':
+            frame.grid_rowconfigure(index, weight=weight)
+            frame.grid_columnconfigure(index, weight=weight)
+        case 'width':
+            frame.grid_columnconfigure(index, weight=weight)
+        case 'height':
+            frame.grid_rowconfigure(index, weight=weight)
 
 def load_settings() -> dict:
     path = OUTPUT_PATH / 'option.json'
