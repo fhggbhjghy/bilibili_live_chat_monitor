@@ -1,10 +1,9 @@
-from customtkinter import CTk, CTkCanvas, CTkEntry, CTkImage, CTkFrame, CTkTextbox, CTkButton, StringVar
-from utility import get_window_scaling, round_rectangle, load_settings, justify_frame
-from message import Message
-from message_container import MessageContainer
+from customtkinter import CTk, CTkFrame
+from gui.message import Message
+from gui.message_container import MessageContainer
 
 class Gui():
-    def __init__(self):
+    def __init__(self, ban):
 
         self.message_entries = {}
 
@@ -12,8 +11,7 @@ class Gui():
         self.window.title('Danmu Monitor')
         self.window.after(0, lambda:self.window.state('zoomed'))
         self.window.configure(fg_color = '#BCA1F9')
-        # self.window.minsize(width=1280,height=720)
-        justify_frame(self.window, 0, 'both')
+        self.window.minsize(width=1280,height=720)
         
         self.background = CTkFrame(
             self.window,
@@ -28,10 +26,6 @@ class Gui():
             padx=(70,20),
             pady=(80,10),
         )
-        
-        justify_frame(self.background, 0, 'both')
-        justify_frame(self.background, 1, 'width')
-        justify_frame(self.background, 2, 'width')
 
         self.content_blocks = []
         self.message_blocks = []
@@ -41,12 +35,16 @@ class Gui():
             )
             for j in range(12):
                 self.message_blocks.append(
-                    Message(self.content_blocks[i], j)
+                    Message(self.content_blocks[i], j, ban)
                 )
 
     def run(self):
         self.window.mainloop()
 
+def ban(content):
+    print(f'banned {content}')
+    return True
+
 if __name__ == '__main__':
-    gui = Gui()
+    gui = Gui(ban)
     gui.run()
