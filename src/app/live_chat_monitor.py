@@ -8,21 +8,19 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Monitor():
-    def __init__(self, update):
+    def __init__(self, update, credential, room_display_id):
 
         # Passed callback function to handle danmu event updates
         self.update = update
 
         # Grab credential and prepare chat hook
-        self.credential = get_credentials()
-        self.room_display_id = get_room_display_id()
         self.live_danmaku = live.LiveDanmaku(
-            room_display_id=self.room_display_id,
-            credential=self.credential
+            room_display_id=room_display_id,
+            credential=credential
         )
 
         # Create instance of room_control with bilibili_api.LiveRoom object
-        self.room_control = RoomControl(self.room_display_id, self.credential)
+        self.room_control = RoomControl(room_display_id, credential)
 
         # Used to run process in sub-thread
         self.thread = None
@@ -74,6 +72,9 @@ class Monitor():
 
     def launch_monitor(self):
         sync(self.live_danmaku.connect())
+
+    def stop(self):
+        sync(self.live_danmaku.disconnect())
 
     def run(self):
 

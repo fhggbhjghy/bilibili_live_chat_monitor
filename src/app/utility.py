@@ -58,7 +58,8 @@ def get_credentials():
             buvid3=cookies['buvid3'],
             buvid4=cookies['buvid4'],
             dedeuserid=cookies['dedeuserid'])
-    except:
+    except Exception as e:
+        print(f'{e}')
         is_logged_in(0)
         return get_credentials()
 
