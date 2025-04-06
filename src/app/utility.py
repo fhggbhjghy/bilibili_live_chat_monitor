@@ -45,10 +45,10 @@ def is_logged_in(instruction = 1):
     return cookies
 
 # Generate credentials to unlock full api functionality
-def get_credentials():
+def get_credentials(instruction = 1):
     
     # Grab cookies
-    cookies = is_logged_in()
+    cookies = is_logged_in(instruction)
 
     # Generate credential
     try:

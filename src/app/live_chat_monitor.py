@@ -8,10 +8,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Monitor():
-    def __init__(self, update, credential, room_display_id):
+    def __init__(self, room_display_id, credential):
 
-        # Passed callback function to handle danmu event updates
-        self.update = update
+        # Callback function to handle danmu event updates
+        self.update = None
 
         # Grab credential and prepare chat hook
         self.live_danmaku = live.LiveDanmaku(
@@ -20,7 +20,7 @@ class Monitor():
         )
 
         # Create instance of room_control with bilibili_api.LiveRoom object
-        self.room_control = RoomControl(room_display_id, credential)
+        # self.room_control = RoomControl(room_display_id, credential)
 
         # Used to run process in sub-thread
         self.thread = None
@@ -61,8 +61,9 @@ class Monitor():
 
             # Try calling callback method to update Gui, passing ban function for external access
             try:
-                self.update(self.id, parsed_message_info, self.room_control.ban)
-                self.id = (self.id+1)%36
+                print(parsed_message_info.get('structured_message'))
+                self.update(self.id, parsed_message_info)
+                self.id+=1
             except Exception as e:
                 print(e)
 
@@ -76,16 +77,17 @@ class Monitor():
     def stop(self):
         sync(self.live_danmaku.disconnect())
 
-    def run(self):
-
-        # Spawn thread that connects to Bilibili danmu websocket
-        try:
-            self.thread = threading.Thread(
-                target = self.launch_monitor,
-                daemon = True
-            )
-            self.thread.start()
-        except Exception as e:
-            logger.info(e)
-            return False
-        return True
+    def run(self, mode = 1):
+        if mode:
+            # Spawn thread that connects to Bilibili danmu websocket
+            try:
+                self.thread = threading.Thread(
+                    target = self.launch_monitor,
+                    daemon = True
+                )
+                self.thread.start()
+            except Exception as e:
+                logger.info(e)
+                return False
+            return True
+        self.launch_monitor()

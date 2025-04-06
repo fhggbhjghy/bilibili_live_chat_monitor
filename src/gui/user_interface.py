@@ -38,6 +38,11 @@ class Gui():
                     Message(self.content_blocks[i], j, ban)
                 )
 
+    def update(self, id, content):
+        message_block: Message = self.message_blocks[id%36]
+        message_block.update(content)
+
+
     def run(self):
         self.window.mainloop()
 
@@ -45,6 +50,6 @@ def ban(content):
     print(f'banned {content}')
     return True
 
-if __name__ == '__main__':
-    gui = Gui(ban)
-    gui.run()
+# if __name__ == '__main__':
+#     gui = Gui(ban)
+#     gui.run()

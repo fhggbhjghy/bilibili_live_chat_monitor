@@ -1,5 +1,6 @@
 from bilibili_api import live, sync
 from json import loads
+from app.utility import get_credentials
 
 class RoomControl():
     def __init__(self, room_display_id, credential):
@@ -10,6 +11,8 @@ class RoomControl():
             room_display_id=room_display_id
         )
 
+        self.count = 1
+
         # for key, val in sync(self.live_room.get_user_info_in_room()).items():
         #     print(f'{key}: {val}\n')
 
@@ -19,19 +22,23 @@ class RoomControl():
             or status.get('uinfo', {'uid': -1}).get('uid') == sync(self.live_room.get_ruid())):
             self.is_admin = True
 
-        print(self.is_admin)
+        # print(self.is_admin)
 
     # Called with id to create and push ban request
     def ban(self, user):
+        if self.count:
+            sync(self.live_room.ban_user(self.count))
+            self.count+=1
         if not self.is_admin:
             print('not admin')
             return False
         if user[0] == -1:
-            print('testing ban')
-            return True
+            print(f'invalid uid {user[0]}')
+            return False
         try:
-            sync(self.live_room.ban_user(user[0]))
-            print('user banned')
+            # sync(self.live_room.ban_user(user[0]))
+            # print('user banned')
+            print(f'banning {user}')
             return True
         except Exception as e:
             print(f'{e}')
